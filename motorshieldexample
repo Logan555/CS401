@@ -1,0 +1,28 @@
+#include<Wire.h>	// include libraries
+#include<Adafruit_MotorShield.h>
+#include "utility/Adafruit_MS_PWMServoDriver.h"
+Adafruit_MotorShield shield1 = Adafruit_MotorShield();// declare motor shield(must be //	addressed if stacking with a hex address, default is 0x60)
+Adafruit_StepperMotor *stepper1 = shield1.getStepper(200, 1);	// the 200 is the        // number of steps and the 1 is the spot on the shield
+Adafruit_DCMotor *DC1 = shield1.getMotor(3); // the 3 is the spot on the shield
+void setup() 
+{
+shield1.begin(); // activate motor shield
+stepper1->setSpeed(50); // set the speed of the stepper
+DC1->setSpeed(150);	// set the speed of the DC motor
+void loop()
+{
+for(int i = 0; i < 400 ; i++)
+{
+	if(i< 200)
+{
+		stepper1->step(1, FORWARD, MICROSTEP);
+// take one step forward as a microstep, there are also single, double and //interleave steps.
+DC1->run(FORWARD); // DC motor goes forward
+}
+	else
+{
+		stepper1->step(1, BACKWARD, MICROSTEP);
+		DC1->run(BACKWARD);
+}
+}	
+}
